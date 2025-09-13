@@ -30,7 +30,7 @@ module FIFO #(
         if (!reset_n) begin
             write_ptr <= 0;
         end 
-        else if(write_en && !full) begin // Never write to full FIFO
+        else if (write_en && !full) begin // Never write to full FIFO
             mem[write_ptr[PTR_WIDTH-1:0]] <= data_in;
             write_ptr <= write_ptr + 1;
         end
@@ -42,8 +42,8 @@ module FIFO #(
             read_ptr <= 0;
             data_out <= 0;
         end 
-        else if(read_en && !empty) begin // Never read from empty FIFO
-            data_out   <= mem[read_ptr[PTR_WIDTH-1:0]];
+        else if (read_en && !empty) begin // Never read from empty FIFO
+            data_out <= mem[read_ptr[PTR_WIDTH-1:0]];
             read_ptr <= read_ptr + 1;
         end
     end
@@ -52,7 +52,8 @@ module FIFO #(
     always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
             count <= 0;
-        end else begin
+        end 
+        else begin
             case ({write_en && !full, read_en && !empty})
                 2'b10: count <= count + 1;
                 2'b01: count <= count - 1;
@@ -65,5 +66,6 @@ module FIFO #(
     assign empty = (count == 0);
     assign almost_full = (count >= ALMOST_FULL_LEVEL);
     assign almost_empty = (count <= ALMOST_EMPTY_LEVEL);
+
 
 endmodule
